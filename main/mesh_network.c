@@ -33,7 +33,24 @@ char* get_mesh_root_ip()
 
 void mesh_rcv_p2p_task()
 {
+    uint8_t data_buf[BUFF_SIZE];
+    int flag = 0;
 
+    mesh_addr_t sender;
+    mesh_data_t m_data;
+
+    m_data.data = data_buf;
+    m_data.size = BUFF_SIZE;
+
+    while(1)
+    {
+        if(esp_mesh_recv(&sender, &m_data, 1000 / portTICK_PERIOD_MS, &flag, NULL, 0) == ESP_OK)
+        {
+            
+        }
+    }
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 void mesh_send_p2p_task()

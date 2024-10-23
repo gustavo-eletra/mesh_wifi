@@ -41,8 +41,10 @@ void net_client_task(void *args)
             free(tx_buf);
         }
         */
+
     }
 
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 void net_server_task(void *args)
@@ -66,17 +68,23 @@ void net_server_task(void *args)
     {
 
     }
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 void net_system_init()
 {
-    if(&net_client_t_handle == NULL)
-    {
-        xTaskCreatePinnedToCore(net_client_task, "NET CLIENT", 2048, NULL, configMAX_PRIORITIES - 3, &net_client_t_handle, 0);
-    }
+}
 
-    if(&net_server_t_handle == NULL)
-    {    
-        xTaskCreatePinnedToCore(net_server_task, "NET SERVER", 2048, NULL, configMAX_PRIORITIES - 3, &net_server_t_handle, 0);
+void net_system_deinit()
+{
+    if(net_client_t_handle != NULL)
+    {
+        vTaskDelete(net_client_t_handle);
+    }
+    
+    if(net_server_t_handle != NULL)
+    {
+        vTaskDelete(net_server_t_handle);
     }
 }

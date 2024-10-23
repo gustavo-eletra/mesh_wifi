@@ -13,6 +13,7 @@
 #include <esp_mesh.h>
 #include <esp_mesh_internal.h>
 #include <esp_wifi.h>
+#include <esp_mac.h>
 #include <esp_event.h>
 #include <driver/uart.h>
 #include <esp_system.h>
@@ -41,6 +42,25 @@ typedef enum
     ERROR
 }UART_CON_TYPE;
 
+typedef struct
+{
+    uint8_t *str;
+    uint32_t size;    
+}string_t;
+
+//ABNT serial size: 4 bytes
+//DLMS serial size: 8-12 bytes
+typedef struct 
+{
+    bool is_root;
+    METER_PROTOCOL_TYPE protocol_type;
+    UART_CON_TYPE uart_type;
+    uint8_t mac_addr[6];
+    string_t serial_num;
+}meter_attrib_t;
+
+extern meter_attrib_t meter_attrib;
+
 extern mesh_addr_t mesh_parent_addr;
 extern bool is_mesh_connected;
 extern int mesh_layer;
@@ -48,11 +68,12 @@ extern esp_netif_t *netif_sta;
 
 extern uint8_t MY_MAC[6];
 
-extern QueueSetHandle_t net_client_q;
+extern QueueHandle_t net_client_q;
+
 extern QueueHandle_t mesh_send_q;
 extern QueueHandle_t mesh_rcv_q;
-extern QueueHandle_t uart_send_q;
-extern QueueHandle_t uart_rcv_q;
+
+extern QueueHandle_t uart_q;
 
 extern TaskHandle_t mesh_rcv_t_handle;
 extern TaskHandle_t mesh_send_t_handle;

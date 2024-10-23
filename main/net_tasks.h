@@ -4,3 +4,4 @@
 #define SERVER_PORT 9999
 
 void net_system_init();
+void net_system_deinit();

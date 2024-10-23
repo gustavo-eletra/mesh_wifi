@@ -1,5 +1,8 @@
-#include "common.h"
 #include <esp_mac.h>
+#include <esp_log.h>
+
+#include "common.h"
+#include "net_tasks.h"
 
 mesh_addr_t mesh_parent_addr;
 
@@ -84,19 +87,17 @@ void mesh_events(void *args, esp_event_base_t event_base, int32_t event_id, void
         {
             esp_netif_dhcpc_stop(netif_sta);
             esp_netif_dhcpc_start(netif_sta);
-        }
-        // esp_mesh_comm_p2p_start();
-        if (esp_mesh_is_root())
-        {
-           // xTaskCreate(check_health_task, "HEALTH_TASK", configMINIMAL_STACK_SIZE + 1024, NULL, configMAX_PRIORITIES - 3, NULL);
-           // xTaskCreate(tx_root_task, "TX_TASK", configMINIMAL_STACK_SIZE + 2048, NULL, configMAX_PRIORITIES - 3, NULL);
-           // xTaskCreate(rx_root_task, "RX_TASK", configMINIMAL_STACK_SIZE + 2048, NULL, configMAX_PRIORITIES - 3, NULL);
+            net_system_init();
+            // xTaskCreate(check_health_task, "HEALTH_TASK", configMINIMAL_STACK_SIZE + 1024, NULL, configMAX_PRIORITIES - 3, NULL);
+        
+            meter_attrib.is_root = true;
         }
         else
         {
-           // xTaskCreate(tx_child_task, "TX_TASK", configMINIMAL_STACK_SIZE + 2048, NULL, configMAX_PRIORITIES - 3, NULL);
-           // xTaskCreate(rx_child_task, "RX_TASK", configMINIMAL_STACK_SIZE + 2048, NULL, configMAX_PRIORITIES - 3, NULL);
+            meter_attrib.is_root = false;
         }
+
+        // esp_mesh_comm_p2p_start();
     }
     break;
     case MESH_EVENT_PARENT_DISCONNECTED:
@@ -108,6 +109,7 @@ void mesh_events(void *args, esp_event_base_t event_base, int32_t event_id, void
         is_mesh_connected = false;
         // mesh_disconnected_indicator();
         mesh_layer = esp_mesh_get_layer();
+        net_system_deinit();
     }
     break;
     case MESH_EVENT_LAYER_CHANGE:
