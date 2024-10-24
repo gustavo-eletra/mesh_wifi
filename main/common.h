@@ -18,6 +18,8 @@
 #include <driver/uart.h>
 #include <esp_system.h>
 
+#include "mpack.h"
+
 #define NET_TAG "NET"
 #define MESH_TAG "MESH"
 
@@ -59,6 +61,7 @@ typedef struct
     string_t serial_num;
 }meter_attrib_t;
 
+extern mpack_reader_t reader;
 extern meter_attrib_t meter_attrib;
 
 extern mesh_addr_t mesh_parent_addr;
@@ -80,3 +83,6 @@ extern TaskHandle_t mesh_send_t_handle;
 
 extern TaskHandle_t net_client_t_handle;
 extern TaskHandle_t net_server_t_handle;
+
+extern char *wifi_ip_address;
+extern char *wifi_ip_broadcast;

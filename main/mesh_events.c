@@ -97,6 +97,9 @@ void mesh_events(void *args, esp_event_base_t event_base, int32_t event_id, void
             meter_attrib.is_root = false;
         }
 
+        ESP_ERROR_CHECK(esp_wifi_get_mac(WIFI_IF_STA, meter_attrib.mac_addr));
+        ESP_LOGI(MESH_TAG ,"<%02x:%02x:%02x:%02x:%02x:%02x>\n", meter_attrib.mac_addr[0],meter_attrib.mac_addr[1],
+        meter_attrib.mac_addr[2],meter_attrib.mac_addr[3],meter_attrib.mac_addr[4],meter_attrib.mac_addr[5]);
         // esp_mesh_comm_p2p_start();
     }
     break;
