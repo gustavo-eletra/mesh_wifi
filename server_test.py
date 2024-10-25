@@ -1,18 +1,25 @@
 import socket
 
-#https://yifan-online.com/en/km/article/detail/2421
-#https://gektor650.medium.com/esp-idf-esp32-udp-broadcasts-messages-through-the-wi-fi-4a7f3d75d8ea
-
 UDP_IP = "255.255.255.255" # Broadcast address, usually 255.255.255.255 or fixed LAN address
-UDP_PORT = 8888 # broadcast port
+SERVER_PORT = 8888 # broadcast port
+CLIENT_PORT = 9999
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-sock.bind((UDP_IP, UDP_PORT))
+mpack_protocol ={
+    "data": [0x14],
+    "crc": 0
+}
 
-MESSAGE = b"Hello, World!"
-sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+server_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+server_sock.bind((UDP_IP, SERVER_PORT))
 
-#while True:
-#    data, addr = sock. recvfrom(1024)
-#    print("Received message: ", data)
+client_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+client_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+client_sock.bind((UDP_IP, CLIENT_PORT))
+
+message = ""
+
+while True:
+    server_sock.sendto(message, (UDP_IP, CLIENT_PORT));
+    data, addr = client_sock. recvfrom(1024)
+    print("Received message: ", data)

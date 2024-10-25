@@ -7,8 +7,8 @@
 #define DEFAULT_RSSI -127
 #define DEFAULT_AUTHMODE WIFI_AUTH_OPEN
 
-#define NET_SSID "ELHP"
-#define NET_PASSWD "eletra2023"
+#define NET_SSID "AndroidAP2CC1"
+#define NET_PASSWD "rzue0381"
 #define MESH_PASSWD "meterfarm1"
 
 
